@@ -1,3 +1,14 @@
+## StableCoin Properties
+- Relative Stability:Anchored | Pegged -> $1.00
+    1. Chainlink Price Feed
+    2. Set a function to exchange ETH & BTC -> $$$
+- Stability Mechanism : Algorithmic
+    1. People
+- Collateral: Exogenous (Crypto)
+    1. wETH
+    2. wBTC
+
+
 ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
