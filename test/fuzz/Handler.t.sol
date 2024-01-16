@@ -10,6 +10,7 @@ import {DSCEngine} from "../../src/DSCEngine.sol";
 import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
+import {MockV3Aggregator} from "../mocks/MockV3Aggregator.sol";
 // import {bound} from "forge-std/StdUtils.sol";
 
 contract Handler is Test {
@@ -19,6 +20,8 @@ contract Handler is Test {
     HelperConfig helperConfig;
     ERC20Mock weth;
     ERC20Mock wbtc;
+    MockV3Aggregator wethUsdPriceFeed;
+    MockV3Aggregator wbtcUsdPriceFeed;
     uint96 MAX_DEPOSIT_SIZE = type(uint96).max;
     uint256 public timesMintDSCCalled;
 
@@ -27,6 +30,9 @@ contract Handler is Test {
         dsc = _dsc;
         weth = _weth;
         wbtc = _wbtc;
+
+        wethUsdPriceFeed = MockV3Aggregator(dsce.getCollateralTokenPriceFeed(address(weth)));
+        wbtcUsdPriceFeed = MockV3Aggregator(dsce.getCollateralTokenPriceFeed(address(wbtc)));
     }
     // redeem Collateral
 
@@ -51,6 +57,11 @@ contract Handler is Test {
         }
         dsce.redeemCollateral(address(collateral), amountCollateral);
         // vm.stopPrank();
+    }
+
+    function updateCollateralPrice(uint96 newPrice) public {
+        int256 newPriceInt = int256(uint256(newPrice));
+        wethUsdPriceFeed.updateAnswer(newPriceInt);
     }
 
     function mintDsc(uint256 amount) public {

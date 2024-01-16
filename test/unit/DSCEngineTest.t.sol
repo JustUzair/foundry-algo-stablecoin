@@ -43,7 +43,7 @@ contract DSCEngineTest is Test {
         priceFeedAddresses.push(wbtcUsdPriceFeed);
         vm.expectRevert(
             abi.encodeWithSelector(
-                DSCEngine.DSCEngine_TokenAndPriceFeedLengthMismatch.selector, tokenAddresses, priceFeedAddresses
+                DSCEngine.DSCEngine__TokenAndPriceFeedLengthMismatch.selector, tokenAddresses, priceFeedAddresses
             )
         );
         new DSCEngine(tokenAddresses, priceFeedAddresses, address(dsc));
@@ -77,7 +77,7 @@ contract DSCEngineTest is Test {
     function testIfCollateralZero() public {
         vm.startPrank(USER);
         ERC20Mock(weth).approve(address(engine), AMOUNT_COLLATERAL);
-        vm.expectRevert(DSCEngine.DSCEngine_NeedsMoreThanZero.selector);
+        vm.expectRevert(DSCEngine.DSCEngine__NeedsMoreThanZero.selector);
         engine.depositCollateral(address(weth), 0);
         console.log(ERC20Mock(weth).balanceOf(address(USER)));
         vm.stopPrank();
@@ -87,7 +87,7 @@ contract DSCEngineTest is Test {
         ERC20Mock newCollateral = new ERC20Mock();
         // depositCollateral(address _tokenCollateralAddress, uint256 _amountCollateral)
         vm.startPrank(USER);
-        vm.expectRevert(abi.encodeWithSelector(DSCEngine.DSCEngine_NotAllowedToken.selector, address(newCollateral)));
+        vm.expectRevert(abi.encodeWithSelector(DSCEngine.DSCEngine__NotAllowedToken.selector, address(newCollateral)));
         engine.depositCollateral(address(newCollateral), AMOUNT_COLLATERAL);
         vm.stopPrank();
     }
@@ -147,7 +147,7 @@ contract DSCEngineTest is Test {
         ERC20Mock newCollateral = new ERC20Mock();
         // depositCollateral(address _tokenCollateralAddress, uint256 _amountCollateral)
         vm.startPrank(USER);
-        vm.expectRevert(abi.encodeWithSelector(DSCEngine.DSCEngine_NotAllowedToken.selector, address(newCollateral)));
+        vm.expectRevert(abi.encodeWithSelector(DSCEngine.DSCEngine__NotAllowedToken.selector, address(newCollateral)));
         engine.redeemCollateral(address(newCollateral), AMOUNT_COLLATERAL);
         vm.stopPrank();
     }
